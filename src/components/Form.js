@@ -5,7 +5,23 @@ import axios from "axios";
 import Error from "./Error";
 
 export default function UserForm(props) {
-  const [users, setUser] = useState([]);
+  const [user, setUser] = useState([]);
+
+  console.log(user);
+
+  const handleSubmit = (e, values) => {
+    e.preventDefault();
+    console.log("submitted!");
+    axios
+      .post("https://reqres.in/api/users", ...values)
+      .then(response => {
+        console.log(response);
+        setUser(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -58,7 +74,7 @@ export default function UserForm(props) {
             className={touched.password && errors.password ? "has-error" : null}
           />
           <Error touched={touched.password} message={errors.password} />
-          <label htmlfor="check-box">
+          <label htmlFor="check-box">
             Terms of Service
             <Field
               id="check-box"
@@ -73,8 +89,3 @@ export default function UserForm(props) {
     </Formik>
   );
 }
-
-const handleSubmit = e => {
-  e.preventDefault();
-  console.log("submitted!");
-};
