@@ -5,16 +5,10 @@ import axios from "axios";
 import Error from "./Error";
 import UserData from "./DisplayUsers";
 
-export default function UserForm() {
+export default function UserForm(props) {
   const [user, setUser] = useState([]);
 
   console.log(user);
-
-  //   useEffect(() => {
-  //     if (props.status) {
-  //       setUser([...user, props.status]);
-  //     }
-  //   }, [props.status]);
 
   //   const handleSubmit = (e, values) => {
   //     e.preventDefault();
@@ -49,13 +43,15 @@ export default function UserForm() {
       <Formik
         initialValues={{ name: "", email: "", password: "", checkbox: false }}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
+        onSubmit={(values, { setStatus, setSubmitting, resetForm }) => {
           setSubmitting(true);
           axios
             .post("https://reqres.in/api/users", values)
             .then(response => {
               console.log(response);
-              setUser(response.data);
+              console.log(user);
+              setUser([...user, values]);
+              setStatus(response.data);
               setSubmitting(false);
               resetForm();
             })
@@ -121,7 +117,14 @@ export default function UserForm() {
           </Form>
         )}
       </Formik>
-      <UserData userList={user} />
+
+      {user.map(users => (
+        <ul key={users.id}>
+          <li>Name: {users.name}</li>
+          <li>Email: {users.email}</li>
+          <li>Password: {users.password}</li>
+        </ul>
+      ))}
     </div>
   );
 }
