@@ -39,7 +39,8 @@ export default function UserForm(props) {
   });
 
   return (
-    <div>
+    <div className="form-div">
+      <h1>Enter your Information</h1>
       <Formik
         initialValues={{ name: "", email: "", password: "", checkbox: false }}
         validationSchema={validationSchema}
@@ -102,7 +103,8 @@ export default function UserForm(props) {
               }
             />
             <Error touched={touched.password} message={errors.password} />
-            <label htmlFor="check-box">
+            <br />
+            <label className="label" htmlFor="check-box">
               Terms of Service
               <Field
                 id="check-box"
